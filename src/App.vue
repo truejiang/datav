@@ -126,6 +126,21 @@
 // @ is an alias to /src
 import echarts from 'echarts'
 import { initLineCharts, initBarCharts, initHuanCharts, initMinHuanCharts } from './util/renderChart.js'
+import { constants } from 'fs';
+import { clearInterval, setInterval } from 'timers';
+function initArrs (arr) {
+  let arrs = []
+  let repeat = '0'.repeat(arr.length)
+  arrs.push(repeat.split(''))
+  for (var i = 1; i <= 20; i++) {
+    let innerarr = []
+    arr.forEach(el => {
+        innerarr.push((el*i*0.05).toFixed(2))
+    })
+    arrs.push(innerarr)
+  }
+  return arrs
+}
 let echarts1, echarts2, echarts3, echarts4, echarts5, echarts6, konghuan, huan1, huan2, huan3, huan4, zhu1
 let echarts1Data= [0, 8, 10],
             echarts2Data= [1.2, 2.9, 0.8], 
@@ -251,6 +266,9 @@ let huan2o = {intervalName: null, beishu: 1}
 let huan3o = {intervalName: null, beishu: 1}
 let huan4o = {intervalName: null, beishu: 1}
 let zhu1o = {intervalName: null, beishu: 1}
+
+let zhu1arr = [7.3, 7.3, 10.3, 11.3, 13.5, 17.7, 17.3, 16.4, 15.5, 77.1, 17.2, 13.1, 13.1, 20.5, 10]
+let zhu1arrs = initArrs(zhu1arr)
 export default {
     name: 'home',
     data() {
@@ -370,32 +388,30 @@ export default {
     },
     created() {
       this.windowWidth = window.screen.width
+      
     },
     mounted() {
+        let that = this
+
         this.$nextTick(() => {
-          echarts1 = initBarCharts('>>电子信息制造业继续保持平稳增长态势', '', ['增加值', '主营业务收入', '固定资产投资'], this.echarts1Data,document.getElementById('echarts1'), 0, 40)
+          echarts1 = initBarCharts('>>电子信息制造业继续保持平稳增长态势', '', ['增加值', '主营业务收入', '固定资产投资'], [0,0,0],document.getElementById('echarts1'), 0, 40)
 
-          this.updateData(echarts1, echarts1Data, this.echarts1Data, echarts1o)
+          
+          echarts2 = initBarCharts('>>电子信息制造业主要分行业主营业务收入同比增长', '', ['通信设备制造业', '电子元件/电子材料', '计算机制造业'], [0, 0, 0],document.getElementById('echarts2'), 0 , 30)
 
-          echarts2 = initBarCharts('>>电子信息制造业主要分行业主营业务收入同比增长', '', ['通信设备制造业', '电子元件/电子材料', '计算机制造业'], [10.9, 6.9, 6.8],document.getElementById('echarts2'), 0 , 30)
 
-          this.updateData(echarts2, echarts2Data, this.echarts2Data, echarts2o)
+          echarts3 = initBarCharts('>>工业增加值比上年增加9.5%', '', ['国有控股企业增长', '非公有控股企业增长'], [0, 0],document.getElementById('echarts3'), 0, 40)
 
-          echarts3 = initBarCharts('>>工业增加值比上年增加9.5%', '', ['国有控股企业增长', '非公有控股企业增长'], [8.0, 10.7],document.getElementById('echarts3'), 0, 40)
 
-          this.updateData(echarts3, echarts3Data, this.echarts3Data, echarts3o)
+          echarts4 = initBarCharts('>>制造业比上年增长11.8%', '', ['酒', '医药', '汽车', '计算机', '电器机械', '烟草', '化学原料', '非金', '有色金'], [0,0,0,0,0,0,0,0,0],document.getElementById('echarts4'), 0, 100)
 
-          echarts4 = initBarCharts('>>制造业比上年增长11.8%', '', ['酒', '医药', '汽车', '计算机', '电器机械', '烟草', '化学原料', '非金', '有色金'], echarts4Data,document.getElementById('echarts4'), 0, 100)
 
-          this.updateData(echarts4, echarts4Data, this.echarts4Data, echarts4o)
+          echarts5 = initBarCharts('>>采矿业比上年增长1.5%', '', ['煤炭开采', '洗选业', '黑色金属', '有色金属', '非金属'], [0,0,0,0,0],document.getElementById('echarts5'), 0, 12)
 
-          echarts5 = initBarCharts('>>采矿业比上年增长1.5%', '', ['煤炭开采', '洗选业', '黑色金属', '有色金属', '非金属'], echarts5Data,document.getElementById('echarts5'), 0, 12)
+          
 
-          this.updateData(echarts5, echarts5Data, this.echarts5Data, echarts5o)
+          echarts6 = initBarCharts('>>电力燃气和水的生产和供应比上年增长14.3%', '', ['电力值', '燃气生产/供应业', '水生产'], [0,0,0],document.getElementById('echarts6'), 0, 40)
 
-          echarts6 = initBarCharts('>>电力燃气和水的生产和供应比上年增长14.3%', '', ['电力值', '燃气生产/供应业', '水生产'], echarts6Data,document.getElementById('echarts6'), 0, 40)
-
-          this.updateData(echarts6, echarts6Data, this.echarts6Data, echarts6o)
 
           konghuan = initHuanCharts('>>工业经济运行实现“四稳三好四新”', '', '',this.konghuanData,document.getElementById('konghuan'))
 
@@ -522,9 +538,9 @@ export default {
                       name:'工业领域细分行业增长情况',
                       type:'bar',
                       barWidth: '60%',
-                      data:[7.3, 7.3, 10.3, 11.3, 13.5, 17.7, 17.3, 16.4, 15.5, 77.1, 17.2, 13.1, 13.1, 20.5, 10],
+                      data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       label: {
-                        show: true,
+                        show: false,
                         position: 'top',
                         color: '#fff',
                         formatter: '{c}%'
@@ -533,8 +549,23 @@ export default {
               ]
           }
           zhu1.setOption(zhuSetOption)
+          that.updateZhuData(zhu1, zhu1arrs)
+          that.updateZhuData(echarts1, initArrs(this.echarts1Data))
+          that.updateZhuData(echarts2, initArrs(this.echarts2Data))
+          that.updateZhuData(echarts3, initArrs(this.echarts3Data))
+          that.updateZhuData(echarts4, initArrs(this.echarts4Data))
+          that.updateZhuData(echarts5, initArrs(this.echarts5Data))
+          that.updateZhuData(echarts6, initArrs(this.echarts6Data))
 
-          this.updateData(zhu1, zhu1Data, this.zhu1Data)
+          setInterval(() => {
+            that.updateZhuData(zhu1, zhu1arrs)
+            that.updateZhuData(echarts1, initArrs(that.echarts1Data))
+            that.updateZhuData(echarts2, initArrs(that.echarts2Data))
+            that.updateZhuData(echarts3, initArrs(that.echarts3Data))
+            that.updateZhuData(echarts4, initArrs(that.echarts4Data))
+            that.updateZhuData(echarts5, initArrs(that.echarts5Data))
+            that.updateZhuData(echarts6, initArrs(that.echarts6Data))
+          }, 1000 * 19);
 
           this.updataTxt(textData, this.txtDataLists)
           // this.updataTxt2(textData2, this.textData2)
@@ -558,7 +589,35 @@ export default {
                 data: data
             }]
           })
-        }, 4000)
+        }, 5000)
+      },
+      updateZhuData (refs, arrs) {
+        let index = 0
+        let data = []
+        let labelShow = false
+        let timer = setInterval(() => {
+          // data = data.map((x, index) => {
+          //   let currentRandom = x + this.random(1,2)
+          //   return currentRandom <= maxData[index] ? currentRandom : maxData[index]
+          // })
+          if (index >= 21) {
+            clearInterval(timer)
+            return
+          }
+          if (index === 20) {
+            labelShow = true
+          }
+          data = [].concat(arrs[index])
+          refs.setOption({
+            series: [{
+                data: data,
+                label: {
+                  show: labelShow
+                }
+            }]
+          })
+          index++
+        }, 200)
       },
       updateHuanData (refs, data, min, max, maxData) {
         setInterval(() => {
@@ -566,7 +625,6 @@ export default {
             let currentRandom =  el.value + this.random(min, max)
             currentRandom <= maxData[index].value ? el.value = currentRandom : el.value = maxData[index].value
           })
-          // console.log(data)
           refs.setOption({
             series: [{
                 data: data

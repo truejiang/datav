@@ -145,9 +145,9 @@ let initBarChartOption = {
   series: [
       {
           type: 'bar',
-          data: [5, 20, 36],
+          data: [0, 0, 10],
           label: {
-              show: true,
+              show: false,
               position: 'top',
               color: '#fff'
           },
